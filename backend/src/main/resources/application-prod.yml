@@ -1,0 +1,38 @@
+# ============================================
+# 生产环境配置（部署到 Linux 服务器时使用）
+# 启动参数：--spring.profiles.active=prod
+# ============================================
+spring:
+  # 数据源配置（MySQL 8.0）
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demo_admin?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      # 生产环境关闭 Druid 监控页面
+      stat-view-servlet:
+        enabled: false
+  # Redis 配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ""
+      database: 0
+      timeout: 5000ms
+      enabled: true
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+          min-idle: 2
+          max-wait: 5000ms
+# MyBatis-Plus 配置（生产环境关闭 SQL 日志）
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl

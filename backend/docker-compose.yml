@@ -1,0 +1,79 @@
+# ============================================
+# Docker Compose 配置文件
+# 一键启动 MySQL 8.0 + Redis
+# ============================================
+
+# Docker Compose 版本
+version: '3.8'
+
+# 服务定义
+services:
+
+  # MySQL 8.0 数据库服务
+  mysql:
+    # 镜像名称
+    image: mysql:8.0
+    # 容器名称
+    container_name: demo-mysql
+    # 重启策略：始终重启
+    restart: always
+    # 端口映射
+    ports:
+      - "3306:3306"
+    # 环境变量
+    environment:
+      # root 用户密码
+      MYSQL_ROOT_PASSWORD: '123456'
+      # 默认字符集
+      MYSQL_CHARSET: utf8mb4
+      # 时区
+      TZ: Asia/Shanghai
+    # 数据卷挂载（持久化）
+    volumes:
+      # MySQL 数据目录
+      - mysql-data:/var/lib/mysql
+      # 初始化SQL脚本（容器首次启动时自动执行）
+      - ../db.sql:/docker-entrypoint-initdb.d/init.sql
+    # 网络
+    networks:
+      - demo-net
+
+  # Redis 缓存服务
+  redis:
+    # 镜像名称
+    image: redis:7-alpine
+    # 容器名称
+    container_name: demo-redis
+    # 重启策略
+    restart: always
+    # 端口映射
+    ports:
+      - "6379:6379"
+    # 数据卷挂载
+    volumes:
+      - redis-data:/data
+    # 启动命令（无密码模式，开发环境）
+    command: redis-server --appendonly yes
+    # 网络
+    networks:
+      - demo-net
+
+# 数据卷定义（持久化存储）
+volumes:
+  mysql-data:
+    driver: local
+  redis-data:
+    driver: local
+
+# 自定义网络
+networks:
+  demo-net:
+    driver: bridge
+
+# ============================================
+# 使用说明：
+# 启动：docker-compose up -d
+# 停止：docker-compose down
+# 查看日志：docker-compose logs -f
+# 查看运行状态：docker-compose ps
+# ============================================

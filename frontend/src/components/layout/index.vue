@@ -12,12 +12,10 @@
 
 import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { useRouter } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 
 // 用户状态管理
 const userStore = useUserStore()
-const router = useRouter()
 
 // 侧边栏折叠状态
 const isCollapse = ref(false)

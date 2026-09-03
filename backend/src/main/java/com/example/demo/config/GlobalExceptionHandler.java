@@ -3,7 +3,9 @@ package com.example.demo.config;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
+import com.example.demo.common.BusinessException;
 import com.example.demo.common.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -22,8 +24,10 @@ import java.util.stream.Collectors;
  * 2. 统一返回格式，避免前端收到不友好的错误信息
  * 3. 处理Sa-Token认证异常
  * 4. 处理参数校验异常
+ * 5. 处理自定义业务异常
  * </p>
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -72,6 +76,19 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public Result<Void> handleNotRoleException(NotRoleException e) {
         return Result.error(403, "没有角色权限：" + e.getRole());
+    }
+
+    /**
+     * 处理自定义业务异常
+     * <p>
+     * 业务代码中主动抛出的异常，携带明确的业务错误码和提示信息。
+     * 例如：用户名已存在、参数不符合业务规则等。
+     * </p>
+     */
+    @ExceptionHandler(BusinessException.class)
+    public Result<Void> handleBusinessException(BusinessException e) {
+        log.warn("业务异常: code={}, message={}", e.getCode(), e.getMessage());
+        return Result.error(e.getCode(), e.getMessage());
     }
 
     /**

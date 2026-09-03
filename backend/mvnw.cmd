@@ -28,12 +28,12 @@
 @REM Begin all REM://lines with '@' in case MAVENBATCH ECHO is off
 @echo off
 @REM set title of command window
-title 0
-@REM enable echoing my setting MAVENBATCH ECHO
-set MAVENBATCH ECHO=off
+title Maven
+@REM enable echoing by setting MAVENBATCH_ECHO
+set MAVENBATCH_ECHO=off
 
 @REM Execute user defined script before this one
-if not "%MAVEN_SKIP RC%"=="" goto skipRcPre
+if not "%MAVEN_SKIP_RC%"=="" goto skipRcPre
 @REM check for pre script, once with hierarchical lookup, once with non-hierarchical lookup
 if exist "%USERPROFILE%\mavenrc_pre.cmd" call "%USERPROFILE%\mavenrc_pre.cmd" %*
 if exist "%USERPROFILE%\mavenrc_pre.bat" call "%USERPROFILE%\mavenrc_pre.bat" %*
@@ -41,7 +41,7 @@ if exist "%USERPROFILE%\mavenrc_pre.bat" call "%USERPROFILE%\mavenrc_pre.bat" %*
 
 @setlocal
 
-set ERROR CODE=0
+set ERROR_CODE=0
 
 @REM To isolate internal variables from possible post scripts, we use another setlocal
 @setlocal
@@ -69,17 +69,17 @@ goto error
 
 @REM ==== END VALIDATION ====
 
-:setInit
+:init
 
-set MAVEN COMMAND ARGS=%*
+set MAVEN_CMD_LINE_ARGS=%*
 
 @REM Find the project base dir, i.e. the directory that contains the folder ".mvn".
 @REM Fallback to current working directory if not found.
 
-set MAVEN PROJECTBASEDIR=%MAVEN BASEDIR%
-if not "%MAVEN PROJECTBASEDIR%"=="" goto endDetectBaseDir
+set MAVEN_PROJECTBASEDIR=%MAVEN_BASEDIR%
+if not "%MAVEN_PROJECTBASEDIR%"=="" goto endDetectBaseDir
 
-set EXEC DIR=%cd%
+set EXEC_DIR=%cd%
 set WDIR=%EXEC_DIR%
 :findBaseDir
 IF EXIST "%WDIR%"\.mvn goto baseDirFound
@@ -89,46 +89,47 @@ set WDIR=%cd%
 goto findBaseDir
 
 :baseDirFound
-set MAVEN PROJECTBASEDIR=%WDIR%
-cd "%EXEC DIR%"
+set MAVEN_PROJECTBASEDIR=%WDIR%
+cd "%EXEC_DIR%"
 goto endDetectBaseDir
 
 :baseDirNotFound
-set MAVEN PROJECTBASEDIR=%EXEC DIR%
-cd "%EXEC DIR%"
+set MAVEN_PROJECTBASEDIR=%EXEC_DIR%
+cd "%EXEC_DIR%"
 
 :endDetectBaseDir
 
-IF NOT EXIST "%MAVEN PROJECTBASEDIR%\.mvn\jvm.config" goto endReadAdditionalConfig
+IF NOT EXIST "%MAVEN_PROJECTBASEDIR%\.mvn\jvm.config" goto endReadAdditionalConfig
 
 @setlocal EnableExtensions EnableDelayedExpansion
-for /F "usebackq delims=" %%a in ("%MAVEN PROJECTBASEDIR%\.mvn\jvm.config") do set JVM CONFIGMAVEN OPTS=%%a
-:endlocal & set JVM CONFIGMAVEN OPTS=%JVM CONFIGMAVEN OPTS%
+for /F "usebackq delims=" %%a in ("%MAVEN_PROJECTBASEDIR%\.mvn\jvm.config") do set JVM_CONFIG_MAVEN_OPTS=%%a
+:endlocal & set JVM_CONFIG_MAVEN_OPTS=%JVM_CONFIG_MAVEN_OPTS%
 
 :endReadAdditionalConfig
 
-SET MAVEN JAVA EXE="%JAVA_HOME%\bin\java.exe"
-set WRAPPER JAR="%MAVEN PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.jar"
-set WRAPPER PROPERTIES="%MAVEN PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.properties"
+SET MAVEN_JAVA_EXE="%JAVA_HOME%\bin\java.exe"
+set WRAPPER_JAR="%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.jar"
+set WRAPPER_PROPERTIES="%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.properties"
+set WRAPPER_URL=https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar
 
 @REM Extension to allow automatically downloading the maven-wrapper.jar from Maven-central
 @REM This allows using the maven wrapper in projects that simply check-in the wrapper jar
-if exist %WRAPPER JAR% (
+if exist %WRAPPER_JAR% (
     goto runWrapper
 ) else (
-    if not "%WRAPPER URL%"=="" (
-        curl -o %WRAPPER JAR% %WRAPPER URL%
+    if not "%WRAPPER_URL%"=="" (
+        curl -o %WRAPPER_JAR% %WRAPPER_URL%
     )
-    if exist %WRAPPER JAR% (
+    if exist %WRAPPER_JAR% (
         goto runWrapper
     ) else (
-        echo Couldn't find %WRAPPER JAR%, downloading it ...
-        echo Downloading from: %WRAPPER URL%
+        echo Couldn't find %WRAPPER_JAR%, downloading it ...
+        echo Downloading from: %WRAPPER_URL%
         powershell -Command "&{"^
 			"$webclient = new-object System.Net.WebClient;"^
 			"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $webclient.DownloadFile('%WRAPPER_URL%', '%WRAPPER_JAR%')"^
 			"}"
-        if exist %WRAPPER JAR% (
+        if exist %WRAPPER_JAR% (
             goto runWrapper
         ) else (
             echo Failed to download wrapper jar
@@ -138,25 +139,25 @@ if exist %WRAPPER JAR% (
 )
 
 :runWrapper
-"%MAVEN JAVA EXE%" %JVM CONFIGMAVEN OPTS% %MAVEN DEBUG OPTS% -classpath %WRAPPER JAR% "-Dmaven.multiModuleProjectDirectory=%MAVEN PROJECTBASEDIR%" org.apache.maven.wrapper.MavenWrapperMain %MAVEN COMMAND ARGS%
+"%MAVEN_JAVA_EXE%" %JVM_CONFIG_MAVEN_OPTS% %MAVEN_DEBUG_OPTS% -classpath %WRAPPER_JAR% "-Dmaven.multiModuleProjectDirectory=%MAVEN_PROJECTBASEDIR%" org.apache.maven.wrapper.MavenWrapperMain %MAVEN_CMD_LINE_ARGS%
 if ERRORLEVEL 1 goto error
 goto end
 
 :error
-set ERROR CODE=1
+set ERROR_CODE=1
 
 :end
-@endlocal & set ERROR CODE=%ERROR CODE%
+@endlocal & set ERROR_CODE=%ERROR_CODE%
 
-if not "%MAVEN_SKIP RC%"=="" goto skipRcPost
+if not "%MAVEN_SKIP_RC%"=="" goto skipRcPost
 @REM check for post script, once with hierarchical lookup, once with non-hierarchical lookup
-if exist "%USERPROFILE%\mavenrc post.bat" call "%USERPROFILE%\mavenrc post.bat"
-if exist "%USERPROFILE%\mavenrc post.cmd" call "%USERPROFILE%\mavenrc post.cmd"
+if exist "%USERPROFILE%\mavenrc_post.bat" call "%USERPROFILE%\mavenrc_post.bat"
+if exist "%USERPROFILE%\mavenrc_post.cmd" call "%USERPROFILE%\mavenrc_post.cmd"
 :skipRcPost
 
-@REM pause the script if MAVENBATCH PAUSE is set to 'on'
-if "%MAVENBATCH PAUSE%"=="on" pause
+@REM pause the script if MAVENBATCH_PAUSE is set to 'on'
+if "%MAVENBATCH_PAUSE%"=="on" pause
 
-if "%MAVENBATCH CMD%"=="exit" exit %ERROR CODE%
+if "%MAVENBATCH_CMD%"=="exit" exit %ERROR_CODE%
 
-exit /B %ERROR CODE%
+exit /B %ERROR_CODE%

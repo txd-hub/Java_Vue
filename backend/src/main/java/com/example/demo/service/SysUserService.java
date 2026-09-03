@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.demo.common.UserCreateRequest;
+import com.example.demo.common.UserUpdateRequest;
 import com.example.demo.entity.SysUser;
 
 import java.util.Map;
@@ -9,7 +12,7 @@ import java.util.Map;
  * 系统用户Service接口
  * <p>
  * 继承IService：获得MyBatis-Plus提供的业务层基础方法
- * 功能说明：定义用户业务层接口，包括登录、获取用户信息等核心方法
+ * 功能说明：定义用户业务层接口，包括登录、获取用户信息、用户CRUD等核心方法
  * </p>
  */
 public interface SysUserService extends IService<SysUser> {
@@ -50,4 +53,39 @@ public interface SysUserService extends IService<SysUser> {
      * </p>
      */
     void logout();
+
+    /**
+     * 分页查询用户列表
+     *
+     * @param pageNum  当前页
+     * @param pageSize 每页条数
+     * @param username 用户名（模糊查询，可为空）
+     * @return 分页结果
+     */
+    Page<SysUser> getUserPage(Integer pageNum, Integer pageSize, String username);
+
+    /**
+     * 根据ID查询用户详情（含角色信息）
+     */
+    SysUser getUserDetailById(Long id);
+
+    /**
+     * 新增用户
+     */
+    void createUser(UserCreateRequest request);
+
+    /**
+     * 更新用户信息
+     */
+    void updateUser(UserUpdateRequest request);
+
+    /**
+     * 删除用户（逻辑删除）
+     */
+    void deleteUser(Long id);
+
+    /**
+     * 绑定用户角色
+     */
+    void bindUserRole(Long userId, Long roleId);
 }

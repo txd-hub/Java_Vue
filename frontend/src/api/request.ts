@@ -16,8 +16,8 @@ import router from '@/router'
 
 // 创建Axios实例
 const service: AxiosInstance = axios.create({
-  // 后端API基础路径（通过Vite代理转发）
-  baseURL: '/api',
+  // 后端API基础路径（开发环境走代理，生产环境走服务器地址）
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   // 请求超时时间（10秒）
   timeout: 10000,
   // 请求头

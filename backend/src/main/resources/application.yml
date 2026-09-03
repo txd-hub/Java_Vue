@@ -5,9 +5,14 @@
 # 服务端口配置
 server:
   port: 8080
+  address: 0.0.0.0
 
 # Spring配置
 spring:
+  # 激活的配置环境（dev / prod）
+  profiles:
+    active: dev
+
   # 应用名称
   application:
     name: demo-admin
@@ -21,9 +26,9 @@ spring:
     # 数据库用户名
     username: root
     # 数据库密码
-    password: root
+    password: '123456'
 
-    # Druid数据库连接池配置
+    # Druid数据库连接池配置（必须在 spring.datasource 下）
     druid:
       # 初始连接数
       initial-size: 5
@@ -37,6 +42,33 @@ spring:
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
+
+  # Redis 配置
+  data:
+    redis:
+      # Redis 服务器地址（本地或 Docker 容器）
+      host: localhost
+      # Redis 端口
+      port: 6379
+      # Redis 密码（无密码留空）
+      password:
+      # 数据库索引（默认0）
+      database: 0
+      # 连接超时时间
+      timeout: 5000ms
+      # 是否启用 Redis 缓存（设为 false 可跳过 Redis）
+      enabled: true
+      # Lettuce 连接池配置
+      lettuce:
+        pool:
+          # 最大活跃连接数
+          max-active: 8
+          # 最大空闲连接数
+          max-idle: 8
+          # 最小空闲连接数
+          min-idle: 0
+          # 获取连接最大等待时间
+          max-wait: -1ms
 
   # Jackson序列化配置
   jackson:

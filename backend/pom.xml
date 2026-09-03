@@ -95,6 +95,18 @@
             <artifactId>spring-security-crypto</artifactId>
         </dependency>
 
+        <!-- Redis 缓存 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- AOP 切面支持（用于接口日志） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
         <!-- 测试启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -114,6 +126,12 @@
                     <source>17</source>
                     <target>17</target>
                 </configuration>
+            </plugin>
+            <!-- Maven JAR 插件（指定兼容版本） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
             </plugin>
             <!-- Spring Boot Maven插件 -->
             <plugin>
