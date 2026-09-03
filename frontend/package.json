@@ -1,0 +1,27 @@
+{
+  "name": "demo-admin-frontend",
+  "version": "1.0.0",
+  "description": "企业级前后端分离项目 - Vue3前端",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "axios": "^1.7.5",
+    "element-plus": "^2.8.1",
+    "pinia": "^2.2.2",
+    "vue": "^3.4.38",
+    "vue-router": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "@vitejs/plugin-vue": "^5.1.3",
+    "bcryptjs": "^3.0.3",
+    "typescript": "~5.5.4",
+    "vite": "^5.4.3",
+    "vue-tsc": "^2.1.4"
+  }
+}
